@@ -1,0 +1,18 @@
+# Ignore Laravel-specific files
+/vendor/
+/bootstrap/
+/storage/
+/public/uploads/
+/public/storage/
+
+# Ignore IDE files
+/.idea/
+/.vscode/
+
+# Ignore operating system files
+.DS_Store
+Thumbs.db
+
+# Ignore other files
+.env
+.phpstorm.meta.php
