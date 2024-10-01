@@ -17,8 +17,8 @@ upload_max_filesize = 2G
 ### Configure Auth Guard
 Inside the config/auth.php file you will need to make a few changes to configure Laravel to use the jwt guard to power your application authentication.
 Make the following changes to the file:
-
-``` config/auth.php
+App/config/auth.php
+``` 
 'defaults' => [
         'guard' => 'api',
         'passwords' => 'users',
