@@ -26,4 +26,9 @@ class HttpRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function error_log()
+    {
+        return $this->hasOne(ErrorLog::class);
+    }
 }

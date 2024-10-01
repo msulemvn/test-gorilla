@@ -9,18 +9,6 @@ use App\Models\Student;
 
 class StudentController extends Controller
 {
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreStudentRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreStudentRequest $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      *
@@ -29,7 +17,22 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        return ApiResponse::success(data: Student::paginate());
+        // return ApiResponse::success(data: student::with('user')->paginate()->through(function ($student) {
+        //     return [
+        //         'id' => $student->id,
+        //         'name' => $student->user->name,
+        //         'email' => $student->user->email,
+        //         'phone' => $student->phone,
+        //     ];
+        // }));
+        return ApiResponse::success(data: student::with('user')->get()->map(function ($student) {
+            return [
+                'id' => $student->id,
+                'name' => $student->user->name,
+                'email' => $student->user->email,
+                'phone' => $student->phone,
+            ];
+        }));
     }
 
     /**
@@ -63,6 +66,13 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        try {
+            $student->user->delete();
+            $student->delete();
+        } catch (\Throwable $th) {
+            return ApiResponse::error(error: 'An error occured while deleting student.');
+        }
+
+        return ApiResponse::success(message: 'Successfully deleted student.');
     }
 }

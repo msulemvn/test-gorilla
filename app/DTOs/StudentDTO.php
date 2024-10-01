@@ -6,14 +6,12 @@ use App\DTOs\BaseDTO;
 
 class StudentDTO extends BaseDTO
 {
-    public $name;
-    public $email;
+    public $account_id;
     public $phone;
 
     public function __construct($applicationData)
     {
-        $this->name = $applicationData['name'];
-        $this->email = $applicationData['email'];
+        $this->account_id = $applicationData['account_id'];
         $this->phone = $applicationData['phone'];
     }
 }

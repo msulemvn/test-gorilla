@@ -21,6 +21,19 @@ class UserController extends Controller
 
     public function showUser()
     {
-        return ApiResponse::success(data: Auth::user());
+        $userId = Auth::user()->id;
+        $myRole = Auth::user()->getRoleNames()[0];
+        if ($myRole == 'admin') {
+            return ApiResponse::success(data: User::find($userId));
+        }
+
+        return ApiResponse::success(data: User::with($myRole)->whereId($userId)->get()->mapWithKeys(function ($user) {
+            $role = Auth::user()->getRoleNames()[0];
+            return [
+                'id' => $user->$role->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ];
+        }));
     }
 }

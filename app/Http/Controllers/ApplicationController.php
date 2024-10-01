@@ -6,8 +6,10 @@ use App\Helpers\ApiResponse;
 use App\Http\Requests\AcceptApplicationRequest;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
+use App\Http\Requests\UrlApplicationRequest;
 use App\Models\Application;
 use App\Services\ApplicationService;
+
 
 
 class ApplicationController extends Controller
@@ -32,7 +34,19 @@ class ApplicationController extends Controller
      */
     public function show()
     {
-        return ApiResponse::success(data: Application::where('status', 'pending')->paginate());
+        return ApiResponse::success(data: Application::where('status', 'pending')->latest()->paginate());
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Application  $application
+     * @return \Illuminate\Http\Response
+     */
+    public function url(UrlApplicationRequest $request, ApplicationService $applicationService)
+    {
+        $validatedData = $request->safe()->only(['filename']);
+        return $applicationService->download($validatedData['filename']);
     }
 
     /**

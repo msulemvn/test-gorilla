@@ -24,20 +24,19 @@ class StudentSeeder extends Seeder
             $application->update(['status' => 'accepted']);
         }
         foreach ($pendingApplications as $application) {
-            $student = Student::create([
-                'name' => $application->name,
-                'email' => $application->email,
-                'phone' => $application->phone,
-            ]);
-
-            $user = User::create([
+            $newUser = User::create([
                 'name' => $application->name,
                 'email' => $application->email,
                 'password' => Hash::make('password'), // Default password for students
             ]);
 
+            $student = Student::create([
+                'account_id' => $newUser->id,
+                'phone' => $application->phone,
+            ]);
+
             // Assign student role
-            $user->assignRole('student');
+            $newUser->assignRole('student');
         }
     }
 }

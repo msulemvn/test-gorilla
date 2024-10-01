@@ -6,10 +6,10 @@ use App\DTOs\BaseDTO;
 
 class AcceptApplicationDTO extends BaseDTO
 {
-    public int $accepted;
+    public string $status;
 
     public function __construct($status)
     {
-        $this->accepted = $status;
+        $this->status = $status;
     }
 }

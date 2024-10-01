@@ -3,9 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Application;
+use Illuminate\Support\Carbon;
+
 
 
 /**
@@ -22,13 +21,15 @@ class ApplicationFactory extends Factory
     {
 
         $personName = $this->faker->name;
-        $filename = "{$personName}.pdf";
+        $safeName = preg_replace('/[^a-zA-Z0-9]+/', '-', $personName);
+        $timestamp = Carbon::now()->format('YmdHs');
+        $filename = "$timestamp-$safeName.pdf";
 
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->unique()->numerify('###########'),
-            'attachment' => Storage::disk('uploads')->url($filename),
+            'attachment' => $filename,
         ];
     }
 }

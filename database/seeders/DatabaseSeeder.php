@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             ApplicationSeeder::class,
             StudentSeeder::class,
+            QuestionSeeder::class,
+            QuizSeeder::class
         ]);
     }
 }

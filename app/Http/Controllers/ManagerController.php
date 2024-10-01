@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\UserDTO;
+use App\DTOs\ManagerDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Requests\StoreManagerRequest;
 use App\Http\Requests\UpdateManagerRequest;
 use App\Models\Manager;
+use App\Models\User;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class ManagerController extends Controller
 {
@@ -18,7 +23,22 @@ class ManagerController extends Controller
      */
     public function store(StoreManagerRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        try {
+            $validatedData['password'] = bcrypt(Str::random(16));
+            $newUser = User::create((new UserDTO($validatedData))->toArray());
+            $newManager = Manager::create((new ManagerDTO(['account_id' => $newUser->id]))->toArray());
+            $newUser->assignRole('manager');
+            if ($newUser) {
+                $status = Password::sendResetLink(["email" => $newUser['email']]);
+                if ($status === Password::RESET_LINK_SENT) {
+                    return ApiResponse::success(message: 'Adding manager successful, email notification sent.');
+                }
+            }
+        } catch (\Exception $e) {
+            return ApiResponse::error(error: 'An error occurred while adding manager.');
+        }
+        return ApiResponse::error(error: 'Adding manager failed.', statusCode: 500);
     }
 
     /**
@@ -29,7 +49,20 @@ class ManagerController extends Controller
      */
     public function show(Manager $manager)
     {
-        return ApiResponse::success(data: Manager::paginate());
+        // return ApiResponse::success(data: Manager::with('user')->paginate()->through(function ($manager) {
+        //     return [
+        //         'id' => $manager->id,
+        //         'name' => $manager->user->name,
+        //         'email' => $manager->user->email,
+        //     ];
+        // }));
+        return ApiResponse::success(data: Manager::with('user')->get()->map(function ($manager) {
+            return [
+                'id' => $manager->id,
+                'name' => $manager->user->name,
+                'email' => $manager->user->email,
+            ];
+        }));
     }
 
     /**
@@ -63,6 +96,13 @@ class ManagerController extends Controller
      */
     public function destroy(Manager $manager)
     {
-        //
+        try {
+            $manager->user->delete();
+            $manager->delete();
+        } catch (\Throwable $th) {
+            return ApiResponse::error(error: 'An error occured while deleting manager.');
+        }
+
+        return ApiResponse::success(message: 'Successfully deleted manager.');
     }
 }

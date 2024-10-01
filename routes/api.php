@@ -5,10 +5,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\QuizInstanceController;
+use App\Http\Controllers\QuizRecordController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupervisorController;
-use App\Models\Application;
-use App\Models\Supervisor;
+use App\Models\QuizRecord;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,21 +68,50 @@ Route::middleware('auth:api')->group(function () {
     Route::controller(ApplicationController::class)->middleware('role:admin,manager')->group(function () {
         Route::get('applications', 'show');
         Route::post('accept-application/{applicationId}', 'acceptApplication');
+        Route::post('reject-application/{applicationId}', 'rejectApplication');
+        Route::get('attachment', 'url');
     });
 
     Route::controller(StudentController::class)->middleware('role:admin,manager')->group(function () {
+        Route::post('delete-student/{student}', 'destroy');
         Route::get('students', 'show');
     });
 
+    Route::controller(QuizController::class)->group(function () {
+        Route::get('quizzes', 'show');
+    });
+
+    Route::controller(QuizInstanceController::class)->middleware('role:admin,manager')->group(function () {
+        Route::post('assign-quiz', 'store');
+        Route::get('assigned-quizzes', 'show');
+    });
+
+    Route::controller(QuizRecordController::class)->middleware('role:admin,manager')->group(function () {
+        Route::get('view-results', 'show');
+        Route::get('recording', 'url');
+    });
+
+    Route::controller(QuizRecordController::class)->middleware('role:student')->group(function () {
+        Route::get('view-results/{id}', 'show');
+    });
+
+    Route::controller(QuizInstanceController::class)->middleware('role:student')->group(function () {
+        Route::get('assigned-quizzes/{studentId}', 'show');
+    });
+
     Route::controller(ManagerController::class)->middleware('role:admin')->group(function () {
-        Route::post('add-manager', 'create');
-        Route::post('delete-manager', 'delete');
+        Route::post('add-manager', 'store');
+        Route::post('delete-manager/{manager}', 'destroy');
         Route::get('managers', 'show');
     });
 
     Route::controller(SupervisorController::class)->middleware('role:admin')->group(function () {
-        Route::get('add-supervisor', 'create');
-        Route::get('delete-manager', 'delete');
+        Route::post('add-supervisor', 'store');
+        Route::post('delete-supervisor/{supervisor}', 'destroy');
         Route::get('supervisors', 'show');
+    });
+
+    Route::controller(QuizRecordController::class)->middleware('role:student')->group(function () {
+        Route::post('submit-quiz', 'store');
     });
 });

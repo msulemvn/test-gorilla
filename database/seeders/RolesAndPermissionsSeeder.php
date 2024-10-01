@@ -39,27 +39,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        $manageruser = User::create([
-            'name' => 'Manager User',
-            'email' => 'manager@example.com',
-            'password' => bcrypt('password'),
-        ]);
-
-        $testUser = User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-        ]);
-
-        $supervisorUser = User::create([
-            'name' => 'Supervisor User',
-            'email' => 'supervisor@example.com',
-            'password' => bcrypt('password'),
-        ]);
-
         $adminUser->assignRole('admin');
-        $manageruser->assignRole('manager');
-        $testUser->assignRole('student');
-        $supervisorUser->assignRole('supervisor');
     }
 }

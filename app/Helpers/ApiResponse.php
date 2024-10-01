@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Console\Concerns\HasParameters;
-use \Illuminate\Http\JsonResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
@@ -26,7 +26,7 @@ class ApiResponse
     ): JsonResponse {
         $response['message'] = $message;
 
-        if (!is_array($data)) {
+        if ($data != null && !is_array($data)) {
             $data = $data->toArray();
         }
 
@@ -40,8 +40,9 @@ class ApiResponse
 
         if (debug_backtrace()[1]['function'] == 'login') {
             $user = Auth::user();
-            if ($user->getRoleNames()[0])
-                $response['data']['role'] = $user->getRoleNames()[0];
+            $role = $user->getRoleNames()[0];
+            if ($role)
+                $response['data']['role'] = $role;
             $roleName = $response['data']['role'];
             $role = Role::findByName($roleName);
             if ($role) {

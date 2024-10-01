@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Response;
 use App\DTOs\ApplicationDTO;
+use App\DTOs\StudentDTO;
+use App\DTOs\UserDTO;
 use App\Helpers\ApiResponse;
 use App\Models\Application;
 use App\Models\Student;
@@ -20,6 +22,16 @@ use Illuminate\Support\Str;
 
 class ApplicationService implements ApplicationServiceInterface
 {
+    public function getColumnNames($tableName)
+    {
+        $columnNames = Schema::getColumnListing($tableName);
+        foreach ($columnNames as $value) {
+            if (!in_array($value, ['id', 'created_at', 'updated_at']))
+                $model[$value] = "";
+        }
+        return $model;
+    }
+
     public function store($data)
     {
         $file = $data['attachment'];
@@ -53,14 +65,8 @@ class ApplicationService implements ApplicationServiceInterface
                                                                                     
          */
 
-        $data['attachment'] = Storage::path($filename);
+        $data['attachment'] = $filename;
         $saveApplication = Application::create((new ApplicationDTO($data))->toArray());
-
-        $data = [
-            'filename' => $filename,
-            'path' => Storage::path($filename),
-            'size' => $file->getSize()
-        ];
 
         return ApiResponse::success(message: 'Your form has been submitted successfully, you would be notified through email');
     }
@@ -73,32 +79,20 @@ class ApplicationService implements ApplicationServiceInterface
             return ApiResponse::error('Failed to update application');
         }
 
-        // creating student
-        $columnNames = Schema::getColumnListing('students');
-        foreach ($columnNames as $value) {
-            $student[$value] = "";
-        }
-        unset($student['created_at']);
-        unset($student['updated_at']);
-        unset($student['id']);
-
-        $application = Application::find($validatedData['applicationId']);
-        // $saveApplication = Application::create((new ApplicationDTO($data))->toArray());
-        $newStudent = Student::create(array_intersect_key($application->toArray(), $student));
-
         // creating user
-        unset($student['phone']);
-        $student = array_intersect_key($application->toArray(), $student);
-        $student['password'] = bcrypt(Str::random(16));
-
-        // $saveApplication = Application::create((new ApplicationDTO($data))->toArray());
-        $newUser = User::create($student);
+        $application = Application::find($validatedData['applicationId']);
+        $userData = array_intersect_key($application->toArray(), $this->getColumnNames('users'));
+        $userData['password'] = bcrypt(Str::random(16));
+        $newUser = User::create((new UserDTO($userData))->toArray());
         $newUser->assignRole('student');
+
+        // creating student
+        $newStudent = Student::create((new StudentDTO(['account_id' => $newUser->id, 'phone' => $application->phone]))->toArray());
 
         if ($newUser) {
             $status = Password::sendResetLink(["email" => $newUser['email']]);
             if ($status === Password::RESET_LINK_SENT) {
-                return ApiResponse::success(message: 'Student application accepted, set user credentials from email');
+                return ApiResponse::success(message: 'Student application accepted, email notification sent.');
             }
         }
         return ApiResponse::error(error: 'Student registration failed');

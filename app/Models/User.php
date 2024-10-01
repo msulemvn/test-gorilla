@@ -8,10 +8,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Notifications\ResetPassword;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes;
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -34,7 +37,8 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
         'email_verified_at',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'deleted_at'
     ];
 
     /**
@@ -45,6 +49,21 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function student()
+    {
+        return $this->HasOne(Student::class, 'account_id');
+    }
+
+    public function manager()
+    {
+        return $this->HasOne(Manager::class, 'account_id');
+    }
+
+    public function supervisor()
+    {
+        return $this->HasOne(Supervisor::class, 'account_id');
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

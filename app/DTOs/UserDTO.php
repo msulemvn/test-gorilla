@@ -14,6 +14,6 @@ class UserDTO extends BaseDTO
     {
         $this->name = $applicationData['name'];
         $this->email = $applicationData['email'];
-        $this->phone = $applicationData['password'];
+        $this->password = $applicationData['password'];
     }
 }

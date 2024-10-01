@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->unsignedBigInteger('account_id');
+            $table->foreign('account_id')->references('id')->on('users');
             $table->string('phone', 12)->unique();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
