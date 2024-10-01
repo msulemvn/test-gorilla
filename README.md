@@ -32,11 +32,3 @@ Make the following changes to the file:
     ],
 
 ```
-Here we are telling the api guard to use the jwt driver, and we are setting the api guard as the default.
- We can now use Laravel's built-in Auth system, with jwt-auth doing the work behind the scenes!
-
-```
-cd laravel-jwt
-```
-
-
