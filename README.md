@@ -1,10 +1,4 @@
-# Project Title
-
-<p align="center">
-    <a href="https://laravel.com" target="_blank">
-        <img src="path_to_laravel_logo.png" width="400" alt="Laravel Logo">
-    </a>
-</p>
+# test-gorilla
 
 <p align="center">
     <a href="build_status_url">
