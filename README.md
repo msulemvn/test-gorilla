@@ -13,7 +13,13 @@ post_max_size = 2G
 upload_max_filesize = 2G
 
 ```
+composer require php-open-source-saver/jwt-auth
+php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
+php artisan jwt:secret
 
+```
+
+```
 ### Configure Auth Guard
 Inside the config/auth.php file you will need to make a few changes to configure Laravel to use the jwt guard to power your application authentication.
 Make the following changes to the file:
