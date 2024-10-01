@@ -2,8 +2,10 @@
 ## Project Configuration
 
 ### Timezone
-The project timezone is set to `Asia/Karachi`.
-
+In App\config\app.php project timezone is set to 
+```
+'timezone' => 'Asia/Karachi',
+```
 ### PHP Settings
 To accommodate larger file uploads, the following PHP settings have been adjusted:
 
