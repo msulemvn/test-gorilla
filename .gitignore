@@ -2,7 +2,7 @@
 /vendor/
 /storage/
 /public/uploads/
-/public/storage/
+/public/storage/app
 
 # Ignore IDE files
 /.idea/
