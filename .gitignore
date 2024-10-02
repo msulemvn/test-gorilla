@@ -1,6 +1,5 @@
 # Ignore Laravel-specific files
 /vendor/
-/bootstrap/
 /storage/
 /public/uploads/
 /public/storage/
