@@ -1,6 +1,24 @@
 # test-gorilla
 ## Project Configuration
 
+### .env Setup
+```
+DB_DATABASE=test-gorilla
+QUEUE_CONNECTION=database
+```
+SMTP config
+- enable 2F Auth
+- setup app password at https://myaccount.google.com/apppasswords
+```
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=<gmail>
+MAIL_PASSWORD=<app password>
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=<gmail>
+MAIL_FROM_NAME="${APP_NAME}"
+```
 ### Timezone
 In App\config\app.php project timezone is set to 
 ```
@@ -42,4 +60,12 @@ In App/config/auth.php
 
     ],
 
+```
+
+### Commands to run project
+```
+php artisan migrate --seed
+php artisan serve
+php artisan queue:work
+php artisan schedule:work
 ```
