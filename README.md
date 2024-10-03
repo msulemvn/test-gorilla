@@ -64,7 +64,7 @@ In App/config/auth.php
 ### Spatie
 This package allows you to manage user permissions and roles in a database.
 Refer to official documentation for setup.
-https://spatie.be/docs/laravel-permission/v6/installation-laravel
+<a href="https://spatie.be/docs/laravel-permission/v6/installation-laravel">Spatie for Laravel</a>
 
 ### Commands to run project
 ```
