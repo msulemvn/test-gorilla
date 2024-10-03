@@ -1,4 +1,9 @@
 # test-gorilla
+test-gorilla is a role and permission based quiz management system, where there are roles like, admin, managers, supervisors and students. The salient features include 
+- User account functionality using JWT Auth and Gmail SMTP.
+- Quiz scheduling using cronjobs and email messaging through queue.
+- User test recording and email functionality
+  
 ## Project Configuration
 
 ### .env Setup
