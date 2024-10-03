@@ -8,7 +8,8 @@ QUEUE_CONNECTION=database
 ```
 SMTP config
 - enable 2F Auth
-- setup app password at https://myaccount.google.com/apppasswords
+- setup app password at </br>
+https://myaccount.google.com/apppasswords
 ```
 MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com
@@ -64,7 +65,8 @@ In App/config/auth.php
 ### Spatie
 This package allows you to manage user permissions and roles in a database.
 Refer to official documentation for setup.
-<a href="https://spatie.be/docs/laravel-permission/v6/installation-laravel">Spatie for Laravel</a>
+</br>
+<a href="https://spatie.be/docs/laravel-permission/v6/installation-laravel"  target="_blank">Spatie for Laravel</a>
 
 ### Commands to run project
 ```
