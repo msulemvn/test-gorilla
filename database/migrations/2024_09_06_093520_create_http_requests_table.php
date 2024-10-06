@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('http_requests', function (Blueprint $table) {
             $table->id();
             $table->string('session_id')->index();
-            $table->integer('user_id')->index()->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('ip')->index();
             $table->string('method');
             $table->string('url');
