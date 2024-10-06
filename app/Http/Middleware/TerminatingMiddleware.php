@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use \App\Models\HttpRequest;
+use \App\DTOs\HttpRequestDTO;
 
 
 class TerminatingMiddleware
@@ -18,25 +20,36 @@ class TerminatingMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $dto = new HttpRequestDTO([
+            'session_id' => session()->getId(),
+            'ip' => $request->ip(),
+            'method' => $request->method(),
+            'url' => $request->fullUrl(),
+            'payload' => $request->toArray(),
+            'headers' => json_encode($request->header()),
+        ]);
+
+        // Log the DTO
+        $httpRequest = HttpRequest::create($dto->toArray());
+        $request['request_log_id'] = $httpRequest->id;
+
         return $next($request);
     }
 
     /**
      * Handle tasks after the response has been sent to the browser.
      */
-    public function terminate(Request $request, Response $response): void
+    public function terminate($request, $response): void
     {
-        // \Log::info('terminate', $request->toArray());
-        $data = [
-            'session_id'  => session()->getId(),
-            'user_id'     => $request->user()->id ?? null,
-            'ip'          => $request->ip(),
-            'ajax'        => $request->ajax(),
-            'url'         => $request->fullUrl(),
-            'payload'     => $request->toArray(),
-            'status_code' => $response->getStatusCode()
-        ];
+        HttpRequest::find($request['request_log_id'])->update(
+            [
+                'user_id' => $request->user()->id ?? null,
+                'response' =>  json_encode($response->getOriginalContent()),
+                'status_code' => $response->getStatusCode(),
+            ]
+        );
 
-        \App\Models\HttpRequest::create($data);
+        // \Log::info('request_log_id', [$request['request_log_id']]);
+        unset($request['request_log_id']);
     }
 }

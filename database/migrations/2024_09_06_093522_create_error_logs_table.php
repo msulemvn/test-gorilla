@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('error_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('request_log_id');
+            $table->unsignedBigInteger('request_log_id')->nullable();
             $table->foreign('request_log_id')->references('id')->on('http_requests');
             $table->string('line_number');
-            $table->string('function_number');
-            $table->string('file_name');
+            $table->string('function');
+            $table->string('file');
             $table->longText('exception_message')->nullable();
+            $table->longText('trace')->nullable();
+            $table->string('ip')->index();
             $table->timestamps();
         });
     }

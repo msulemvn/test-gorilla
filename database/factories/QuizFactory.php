@@ -34,7 +34,7 @@ class QuizFactory extends Factory
 
         return [
             'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph($maxSentences = 3, $maxWords = 100),
+            'description' => $this->faker->paragraph($maxSentences = 2, $maxWords = 50),
             'mcqs' => json_encode($quizData['mcqs']),
         ];
     }

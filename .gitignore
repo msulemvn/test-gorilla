@@ -2,6 +2,7 @@
 /vendor/
 /public/uploads/
 /public/storage/app
+/storage/logs/laravel.log
 
 # Ignore IDE files
 /.idea/

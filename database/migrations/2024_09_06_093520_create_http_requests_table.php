@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('session_id')->index();
             $table->integer('user_id')->index()->nullable();
             $table->string('ip')->index();
-            $table->boolean('ajax')->index();
+            $table->string('method');
             $table->string('url');
             $table->jsonb('payload');
-            $table->integer('status_code')->index();
+            $table->jsonb('headers');
+            $table->jsonb('response')->nullable();
+            $table->integer('status_code')->nullable();
             $table->timestamps();
         });
     }

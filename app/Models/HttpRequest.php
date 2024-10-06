@@ -12,15 +12,7 @@ class HttpRequest extends Model
         'payload' => 'collection'
     ];
 
-    protected $fillable = [
-        'session_id',
-        'user_id',
-        'ip',
-        'ajax',
-        'url',
-        'payload',
-        'status_code'
-    ];
+    protected $guarded = [];
 
     public function user()
     {

@@ -6,18 +6,22 @@ use App\DTOs\BaseDTO;
 
 class ErrorLogsDTO extends BaseDTO
 {
-    public $quiz_id;
-    public $assigned_to;
-    public $duration;
-    public $scheduled_at;
-    public $deadline_at;
+    public $request_log_id;
+    public $line_number;
+    public $function;
+    public $file;
+    public $exception_message;
+    public $trace;
+    public $ip;
 
-    public function __construct($quizInstanceData)
+    public function __construct($errorLogsInstance)
     {
-        $this->quiz_id = $quizInstanceData['quiz_id'];
-        $this->assigned_to = $quizInstanceData['assigned_to'];
-        $this->scheduled_at = $quizInstanceData['scheduled_at'];
-        $this->deadline_at = $quizInstanceData['deadline_at'];
-        $this->duration = $quizInstanceData['duration'];
+        $this->request_log_id = $errorLogsInstance['request_log_id'];
+        $this->line_number = $errorLogsInstance['line_number'];
+        $this->function = $errorLogsInstance['function'];
+        $this->file = $errorLogsInstance['file'];
+        $this->exception_message = $errorLogsInstance['exception_message'];
+        $this->trace = $errorLogsInstance['trace'];
+        $this->ip = $errorLogsInstance['ip'];
     }
 }
