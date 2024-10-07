@@ -1,6 +1,7 @@
 # Ignore Laravel-specific files
 /vendor/
-/public/uploads/
+/storage/app/uploads/
+/storage/app/recordings/
 /public/storage/app
 /storage/logs/laravel.log
 
