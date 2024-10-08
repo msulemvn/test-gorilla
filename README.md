@@ -5,7 +5,11 @@ test-gorilla is a role and permission based quiz management system, where there 
 - User test recording and email functionality.
   
 ## Project Configuration
-
+### Composer
+```
+composer install
+composer update
+```
 ### .env Setup
 ```
 DB_DATABASE=test-gorilla
